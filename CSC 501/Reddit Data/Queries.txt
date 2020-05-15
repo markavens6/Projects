@@ -1,0 +1,14 @@
+relationship creation
+USING PERIODIC COMMIT 100 LOAD CSV WITH HEADERS FROM 'file:///test_subreddit.csv' AS row FIELDTERMINATOR '\t' MERGE(sr:SubReddit{id: row['SOURCE_SUBREDDIT']}) MERGE(tr:SubReddit{id:row['TARGET_SUBREDDIT']}) MERGE(sr)-[rel:targets {id: row['POST_ID'], sentiment: toInteger(row['LINK_SENTIMENT']),textProp: [x in split(row['PROPERTIES'],',') | toFloat(x)], timestamp: row['TIMESTAMP']}]->(tr) RETURN count(rel)
+
+Most Attacking Subreddit
+
+match (s1:SubReddit)-[r:targets{sentiment:-1}]->()  return s1, count(r.sentiment) as num order by num DESC limit 20
+
+Man or Woman writing the post (can be improved)
+match (sr: SubReddit)-[r:targets]->() return sr.id, (r.textProp[22]+r.textProp[26]+r.textProp[27]+r.textProp[28])/4,(r.textProp[37]+r.textProp[30]+r.textProp[24]+r.textProp[25])/4
+
+
+Person writing is mature or immature
+
+match (sr: SubReddit)-[r:targets]->() return sr.id,(r.textProp[49]+r.textProp[24]+r.textProp[26]+r.textProp[27]+r.textProp[28])/5,(r.textProp[48]+r.textProp[25]+r.textProp[26]+r.textProp[27]+r.textProp[28])/5

@@ -1,0 +1,27 @@
+
+working payment method
+select payment_type,count(payment_type),LocationID from taxi group by LocationID order by LocationID asc;
+
+highest revenue
+select MAX(total_amount),pickup_datetime,LocationID from taxi group by LocationID order by LocationID asc;
+
+select MAX(total_amount),(select strftime('%H', pickup_datetime)),LocationID from taxi group by LocationID order by LocationID asc;
+
+
+
+average speed
+
+select avg(trip_distance*1.609) from taxi group by LocationID order by LocationID asc;
+
+
+inserting into columns
+insert into taxi_norm(average_trip_distance) select (select avg(trip_distance*1.609) from taxi group by LocationID order by LocationId asc) from taxi;
+
+
+average time
+select distinct (avg(strftime('%s', drop_datetime)-strftime('%s', pickup_datetime)))/3600,LocationID from taxi group by LocationID order by LocationID asc;
+
+
+working query average distance in km and average time in hrs
+
+create table taxi_norm as select LocationID as LocationID, avg(strftime('%s', drop_datetime)-strftime('%s', pickup_datetime))/3600 as average_time_hrs,avg(trip_distance*1.609) as avg_trip_distance from taxi group by LocationID order by LocationID asc;

@@ -1,0 +1,1 @@
+Select  avg(CAST((julianday(b.CreationDate) - julianday(a.CreationDate))*24 AS real)),strftime('%Y', a.CreationDate) from post a, post b where  a.PostTypeId= 1 and b.PostTypeId = 2 and a.Id = b.ParentId group by strftime('%Y', a.CreationDate);
